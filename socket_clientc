@@ -1,0 +1,50 @@
+#include<stdio.h>
+#include<sys/socket.h>
+#include<sys/types.h>
+#include<arpa/inet.h>
+#include<stdlib.h>
+
+void DisplayError(char * ErrorMsg)
+{
+	puts(ErrorMsg);
+	exit(1);
+}
+
+
+int main(int argc,char *argv[])
+{
+int Client_Desc;
+struct sockaddr_in EchoServerAddr,EchoClientAddr; //address structure
+unsigned short ServerPort;
+
+if(argc!=3)
+{
+	printf("Plese enter correct number of arguments");
+}
+
+ServerPort=atoi(argv[1]);
+//server_ip=atoi
+
+//create socket for server
+
+if((Client_Desc=socket(AF_INET,SOCK_STREAM,0))<0)
+{
+	DisplayError("couldnt create socket");
+}
+
+memset(&EchoServerAddr,0,sizeof(EchoServerAddr));
+EchoServerAddr.sin_family=AF_INET;
+EchoServerAddr.sin_addr.s_addr=inet_addr(argv[2]);
+EchoServerAddr.sin_port=htons(ServerPort);
+
+
+if(connect(Client_Desc,(struct sockaddr *)&EchoServerAddr,sizeof(EchoServerAddr))<0)
+{
+DisplayError("couldnt connect");
+}
+
+write(Client_Desc,"asdfg",5);
+//write(Client_Desc,"zxcvb",5);
+
+return 0;
+}
